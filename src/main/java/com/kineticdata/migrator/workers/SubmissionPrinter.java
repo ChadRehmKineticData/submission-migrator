@@ -1,5 +1,6 @@
 package com.kineticdata.migrator.workers;
 
+import com.kineticdata.migrator.App;
 import com.kineticdata.migrator.models.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -14,7 +15,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
 public class SubmissionPrinter extends Thread {
-    private static final String SUBMISSIONS_FILE = "submissions.csv";
     private final File outputDir;
     private final List<Question> questions;
     private final BlockingQueue<Submission> inQ;
@@ -27,7 +27,7 @@ public class SubmissionPrinter extends Thread {
 
     @Override
     public void run() {
-        File submissionsFile = new File(outputDir, SUBMISSIONS_FILE);
+        File submissionsFile = new File(outputDir, App.SUBMISSION_CSV_FILE);
         try(CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(submissionsFile), CSVFormat.DEFAULT)) {
             printHeader(csvPrinter, questions);
             Submission submission;

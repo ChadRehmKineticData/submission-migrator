@@ -46,9 +46,7 @@ public class Export {
     // configuration static variables that may eventually be arguments/config options
     private static final int SUBMISSION_CHUNK_SIZE = 100;
     private static final int QUEUE_MULTIPLIER = 2;
-    private static final String CONFIG_FILE_NAME = "config.yaml";
     private static final String INVALID_CHARS = "[^a-zA-Z0-9- ]";
-    private static final String TEMPLATE_FILE_NAME = "template.yaml";
 
     public static void export(Config config, ARServerUser user) {
         for (String catalogName : getCatalogNames(user, config.getReQueryLimit()))
@@ -137,7 +135,7 @@ public class Export {
             }).collect(Collectors.toList()));
         }};
         String yamlString = new Yaml().dumpAsMap(templateData);
-        File templateFile = new File(templateDir, TEMPLATE_FILE_NAME);
+        File templateFile = new File(templateDir, App.TEMPLATE_YAML_FILE);
         try (FileWriter fileWriter = new FileWriter(templateFile)) {
             fileWriter.write(yamlString);
         } catch (IOException e) {

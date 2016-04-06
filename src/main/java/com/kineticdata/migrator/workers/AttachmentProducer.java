@@ -2,6 +2,7 @@ package com.kineticdata.migrator.workers;
 
 import com.bmc.arsys.api.*;
 import com.google.common.base.Strings;
+import com.kineticdata.migrator.App;
 import com.kineticdata.migrator.impl.ArsHelper;
 import com.kineticdata.migrator.impl.Config;
 import com.kineticdata.migrator.impl.Utils;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 public class AttachmentProducer extends Thread {
     private static final int[] FIELDS = { Attachment.ID, Attachment.ENTRY_ID, Attachment.FILE };
     private static final List<SortInfo> ORDER = Collections.EMPTY_LIST;
-    private static final String ATTACHMENTS_DIR = "attachments";
     private final ARServerUser user;
     private final int queryLimit;
     private final File outputDir;
@@ -56,7 +56,7 @@ public class AttachmentProducer extends Thread {
 
     public void downloadAttachments(Submission submission)  {
         for (Attachment attachment : submission.getAttachments()) {
-            File directory = Utils.createDirectory(outputDir, ATTACHMENTS_DIR, submission.getId(),
+            File directory = Utils.createDirectory(outputDir, App.ATTACHMENT_DIR, submission.getId(),
                     attachment.getId());
             try (FileOutputStream out = new FileOutputStream(new File(directory, attachment.getFileName()))) {
                 byte[] entryBlob = user.getEntryBlob(Attachment.FORM, attachment.getEntryId(), Attachment.FILE);

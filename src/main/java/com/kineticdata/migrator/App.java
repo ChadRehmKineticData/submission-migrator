@@ -11,10 +11,13 @@ import static java.lang.String.format;
 
 public class App
 {
-    private static final String CONFIG_FILE_NAME = "config.yaml";
+    public static final String CONFIG_FILE = "config.yaml";
+    public static final String SUBMISSION_CSV_FILE = "submissions.csv";
+    public static final String TEMPLATE_YAML_FILE = "template.yaml";
+    public static final String ATTACHMENT_DIR = "attachments";
 
     public static void main( String[] args ) throws IOException, ParseException {
-        Config config = Config.configure(CONFIG_FILE_NAME);
+        Config config = Config.configure(CONFIG_FILE);
         ARServerUser user = ArsHelper.createUser(config);
         String action = argAt(args, 0);
         if (action == null) {

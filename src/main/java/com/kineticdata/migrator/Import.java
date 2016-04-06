@@ -36,8 +36,6 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 
 public class Import {
-    private static final String SUBMISSIONS_CSV_FILE = "submissions.csv";
-    private static final String TEMPLATE_YAML_FILE = "template.yaml";
     private static final String TEMPLATE_NAME_ATTR = "template name";
     private static final String QUESTION_MAP_ATTR = "question map";
 
@@ -45,8 +43,8 @@ public class Import {
         // get the specified data directory and validate that it exists and is a directory, also
         // get the submissions and template files from that directory
         File dataDir = newDirectory(directory);
-        File submissionsCsv = newFile(dataDir, SUBMISSIONS_CSV_FILE);
-        File templateYaml = newFile(dataDir, TEMPLATE_YAML_FILE);
+        File submissionsCsv = newFile(dataDir, App.SUBMISSION_CSV_FILE);
+        File templateYaml = newFile(dataDir, App.TEMPLATE_YAML_FILE);
 
         // get the necessary information from the template yaml file, this includes the original
         // template name which we will use to find the correct form slug for importing, it also
@@ -143,7 +141,7 @@ public class Import {
 
     public static String uploadFile(Config config, File dataDir, String formSlug,
                                     String submissionId, String attachmentId) {
-        File attachmentDir = newDirectory(dataDir, "attachments", submissionId, attachmentId);
+        File attachmentDir = newDirectory(dataDir, App.ATTACHMENT_DIR, submissionId, attachmentId);
 
         File[] files = attachmentDir.listFiles();
         if (files.length != 1)

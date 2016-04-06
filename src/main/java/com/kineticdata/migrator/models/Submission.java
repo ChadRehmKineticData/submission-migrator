@@ -20,10 +20,9 @@ public class Submission {
     public static final int TEMPLATE_ID = 700000800;
     public static final int UPDATED_AT = 6;
     public static final int VALIDATION_STATUS = 700002400;
-    private static final List<String> REQUEST_STATUSES = Arrays.asList(
-            "Open", "Closed");
-    private static final List<String> STATUSES = Arrays.asList(
-            "New", "Sent", "Completed", "Expired", "Delete", "In Progress", "Opt Out");
+    private static final List<String> REQUEST_STATUSES = Arrays.asList("Open", "Closed");
+    private static final List<String> STATUSES = Arrays.asList("New", "Sent", "Completed",
+            "Expired", "Delete", "In Progress", "Opt Out");
     public static final Submission POISON = new Submission();
     private final String closedAt;
     private final String createdAt;
