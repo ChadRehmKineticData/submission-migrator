@@ -37,8 +37,8 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 
 public class Import {
-    private static final String TEMPLATE_NAME_ATTR = "template name";
-    private static final String QUESTION_MAP_ATTR = "question map";
+    private static final String TEMPLATE_NAME_ATTR = "re template name";
+    private static final String QUESTION_MAP_ATTR = "re to ce question map";
 
     public static void start(Config config, String directory) throws IOException, ParseException {
         // get the specified data directory and validate that it exists and is a directory, also

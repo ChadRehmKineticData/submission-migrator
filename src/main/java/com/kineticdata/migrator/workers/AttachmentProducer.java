@@ -60,6 +60,8 @@ public class AttachmentProducer extends Thread {
                     attachment.getId());
             try (FileOutputStream out = new FileOutputStream(new File(directory, attachment.getFileName()))) {
                 byte[] entryBlob = user.getEntryBlob(Attachment.FORM, attachment.getEntryId(), Attachment.FILE);
+                if (entryBlob == null)
+                    entryBlob = new byte[0];
                 out.write(entryBlob);
             } catch (IOException | ARException e) {
                 throw new RuntimeException("Caught exception in Attachment thread.", e);
