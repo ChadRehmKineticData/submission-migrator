@@ -12,6 +12,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -179,7 +180,13 @@ public class Import {
         // make the request
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
-            return EntityUtils.toString(httpResponse.getEntity());
+            if (HttpStatus.SC_OK != httpResponse.getStatusLine().getStatusCode()) {
+                throw new RuntimeException(format("Got %s response: %s",
+                        httpResponse.getStatusLine().getStatusCode(),
+                        EntityUtils.toString(httpResponse.getEntity())));
+            } else {
+                return EntityUtils.toString(httpResponse.getEntity());
+            }
         } catch (IOException e ) {
             throw new RuntimeException(e);
         }
