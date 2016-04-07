@@ -1,6 +1,7 @@
 package com.kineticdata.migrator;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.kineticdata.migrator.impl.Config;
@@ -93,13 +94,14 @@ public class Import {
                     String questionName = entry.getKey();
                     String fieldName = (String) entry.getValue();
                     String valueString = submission.get(questionName);
-                    switch (questionTypes.get(questionName)) {
-                        case "Attachment":
-                            valueString = uploadFile(config, dataDir, form.getSlug(), submission.get("Instance Id"), valueString);
-                            break;
-                        case "Checkbox":
-                            valueString = JSONArray.toJSONString(Arrays.asList(valueString.split("\\s*,\\s*")));
-                            break;
+                    if (questionTypes.get(questionName).equals("Attachment")) {
+                        valueString = Strings.isNullOrEmpty(valueString)
+                                ? "[]"
+                                : uploadFile(config, dataDir, form.getSlug(), submission.get("Instance Id"), valueString);
+                    } else if (questionTypes.get(questionName).equals("Checkbox")) {
+                        valueString = Strings.isNullOrEmpty(valueString)
+                                ? "[]"
+                                : JSONArray.toJSONString(Arrays.asList(valueString.split("\\s*,\\s*")));
                     }
                     valuesList.add(ImmutableMap.of("name", fieldName, "value", valueString));
                 }

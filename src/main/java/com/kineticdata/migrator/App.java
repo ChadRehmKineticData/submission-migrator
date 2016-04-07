@@ -5,7 +5,9 @@ import com.kineticdata.migrator.impl.ArsHelper;
 import com.kineticdata.migrator.impl.Config;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static java.lang.String.format;
 
@@ -24,11 +26,8 @@ public class App
             System.out.println("An action argument is required: import, export.");
         } else {
             if (action.equals("import")) {
-                String directory = argAt(args, 1);
-                if (directory != null) {
-                    Import.start(config, directory);
-                } else {
-                    System.out.println("The import action requires a directory argument to be specified.");
+                for (String arg : Arrays.copyOfRange(args, 1, args.length)) {
+                    Import.start(config, arg);
                 }
             } else if (action.equals("export")) {
                 String catalog = argAt(args, 1);
