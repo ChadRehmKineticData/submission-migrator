@@ -89,7 +89,7 @@ public class Import {
                 // compute the values list to be saved by iterating through the question map and
                 // getting the value from the submission above.  Note that there is some special
                 // processing necessary for attachment and checkbox fields
-                List<Map<String,String>> valuesList = new ArrayList<>();
+                Map<String,String> values = new HashMap<>();
                 for(Map.Entry<String,Object> entry: questionMap.entrySet()) {
                     String questionName = entry.getKey();
                     String fieldName = (String) entry.getValue();
@@ -103,14 +103,14 @@ public class Import {
                                 ? "[]"
                                 : JSONArray.toJSONString(Arrays.asList(valueString.split("\\s*,\\s*")));
                     }
-                    valuesList.add(ImmutableMap.of("name", fieldName, "value", valueString));
+                    values.put(fieldName, valueString);
                 }
                 // compute the core state which is derived from two columns in the old submission
                 String coreState = "Completed".equals(submission.get("Status"))
                         ? "Closed".equals(submission.get("Request Status")) ? "Closed" : "Submitted"
                         : "Draft";
                 Map<String,Object> data = new HashMap<String,Object>() {{
-                    put("values", valuesList);
+                    put("values", values);
                     put("coreState", coreState);
                     put("createdAt", submission.get("Created At").replace("Z", ".000Z"));
                     put("createdBy", submission.get("Submitter"));
