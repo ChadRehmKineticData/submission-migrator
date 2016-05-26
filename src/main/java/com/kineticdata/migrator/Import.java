@@ -2,11 +2,8 @@ package com.kineticdata.migrator;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.kineticdata.migrator.impl.Config;
 import com.kineticdata.migrator.models.json.Form;
-import com.kineticdata.migrator.models.json.FormAttribute;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -27,13 +24,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
 
@@ -47,6 +41,14 @@ public class Import {
         File dataDir = newDirectory(directory);
         File submissionsCsv = newFile(dataDir, App.SUBMISSION_CSV_FILE);
         File templateYaml = newFile(dataDir, App.TEMPLATE_YAML_FILE);
+
+        // prepare the ids file, we create it if it does not already exist and we instantiate a
+        // reader and writer for this file
+        File idsFile = new File(directory, App.ID_CSV_FILE);
+        idsFile.createNewFile();
+        BufferedReader idsReader = new BufferedReader(new FileReader(idsFile));
+        PrintWriter idsWriter = new PrintWriter(new BufferedWriter(new FileWriter(idsFile, true)));
+        boolean checkForExisting = true;
 
         // get the necessary information from the template yaml file, this includes the original
         // template name which we will use to find the correct form slug for importing, it also
@@ -125,10 +127,38 @@ public class Import {
                         put("closedBy", submission.get("Submitter"));
                     }
                 }};
-                String response = patchJson(config, submissionsPath(config, form.getSlug()), data);
-                System.out.println(response);
+
+                // Here we will check for existing submission ids in the ids file.  Note that we do
+                // this until we get a null line back from the file (indicating that there are no
+                // more ids).  Once we get a null read we set the flag to false so that we do not
+                // attempt to read from the file again and we close the file.  NOTE that this
+                // precaution is important because we will start writing new ids to this file and we
+                // do not want to accidentally read those here.
+                String existingId = null;
+                if (checkForExisting) {
+                    existingId = idsReader.readLine();
+                    if (existingId == null) {
+                        checkForExisting = false;
+                        idsReader.close();
+                    }
+                }
+
+                // If there was not an existing id we make the PATCH call to create a new one and
+                // get the id from the response and write that to the ids file.  If there was an
+                // existing id we PATCH to that to update the existing submission and we do not need
+                // to parse the response.
+                if (existingId == null) {
+                    String response = patchJson(config, submissionsPath(config, form.getSlug()), data);
+                    JSONObject responseObject = (JSONObject) parse(response);
+                    JSONObject submissionObject = (JSONObject) responseObject.get("submission");
+                    String submissionId = (String) submissionObject.get("id");
+                    idsWriter.println(submissionId);
+                } else {
+                    patchJson(config, submissionsPath(config, form.getSlug(), existingId), data);
+                }
             }
         }
+        idsWriter.close();
     }
 
     public static List<Form> getForms(Config config) {
@@ -196,6 +226,10 @@ public class Import {
 
     public static String submissionsPath(Config config, String formSlug) {
         return apiPath(config) + "/kapps/" + config.getCeKappSlug() + "/forms/" + formSlug + "/submissions";
+    }
+
+    public static String submissionsPath(Config config, String formSlug, String id) {
+        return apiPath(config) + "/submissions/" + id;
     }
 
     public static String kappPath(Config config) {

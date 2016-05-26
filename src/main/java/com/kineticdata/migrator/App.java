@@ -15,6 +15,7 @@ public class App
 {
     public static final String CONFIG_FILE = "config.yaml";
     public static final String SUBMISSION_CSV_FILE = "submissions.csv";
+    public static final String ID_CSV_FILE = "ids.csv";
     public static final String TEMPLATE_YAML_FILE = "template.yaml";
     public static final String ATTACHMENT_DIR = "attachments";
 
