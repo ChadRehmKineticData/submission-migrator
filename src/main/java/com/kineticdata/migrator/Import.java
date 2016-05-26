@@ -96,14 +96,19 @@ public class Import {
                     String questionName = entry.getKey();
                     String fieldName = (String) entry.getValue();
                     String valueString = submission.get(questionName);
-                    if (questionTypes.get(questionName).equals("Attachment")) {
-                        valueString = Strings.isNullOrEmpty(valueString)
-                                ? "[]"
-                                : uploadFile(config, dataDir, form.getSlug(), submission.get("Instance Id"), valueString);
-                    } else if (questionTypes.get(questionName).equals("Checkbox")) {
-                        valueString = Strings.isNullOrEmpty(valueString)
-                                ? "[]"
-                                : JSONArray.toJSONString(Arrays.asList(valueString.split("\\s*,\\s*")));
+                    // check to see if the question name was a question on the old form or a base
+                    // field on the submission, base fields on the submission will not be in the
+                    // questionTypes map and we always treat their values as strings
+                    if (questionTypes.containsKey(questionName)) {
+                        if (questionTypes.get(questionName).equals("Attachment")) {
+                            valueString = Strings.isNullOrEmpty(valueString)
+                                    ? "[]"
+                                    : uploadFile(config, dataDir, form.getSlug(), submission.get("Instance Id"), valueString);
+                        } else if (questionTypes.get(questionName).equals("Checkbox")) {
+                            valueString = Strings.isNullOrEmpty(valueString)
+                                    ? "[]"
+                                    : JSONArray.toJSONString(Arrays.asList(valueString.split("\\s*,\\s*")));
+                        }
                     }
                     values.put(fieldName, valueString);
                 }
