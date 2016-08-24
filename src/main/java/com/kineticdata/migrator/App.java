@@ -18,6 +18,7 @@ public class App
     public static final String ID_CSV_FILE = "ids.csv";
     public static final String TEMPLATE_YAML_FILE = "template.yaml";
     public static final String ATTACHMENT_DIR = "attachments";
+    public static final String VERSION = "1.0.0";
 
     public static void main( String[] args ) throws IOException, ParseException {
         Config config = Config.configure(CONFIG_FILE);
@@ -42,6 +43,8 @@ public class App
                 } else {
                     Export.export(config, user);
                 }
+            } else if (action.equals("version")) {
+                System.out.println(VERSION);
             } else {
                 System.out.println(format("Invalid action argument specified: %s", action));
             }
