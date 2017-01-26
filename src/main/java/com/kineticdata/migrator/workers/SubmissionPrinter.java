@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SubmissionPrinter extends Thread {
     private final File outputDir;
@@ -45,6 +46,7 @@ public class SubmissionPrinter extends Thread {
                 "Request Status", "Validation Status", "Submitter", "Created At", "Submitted At",
                 "Closed At", "Updated At"));
         header.addAll(questions.stream().map(Question::getName).collect(Collectors.toList()));
+        header.addAll(IntStream.range(0, 70).boxed().map(n -> "Attribute " + (n + 1)).collect(Collectors.toList()));
         csvPrinter.printRecord(header);
     }
 
@@ -66,6 +68,8 @@ public class SubmissionPrinter extends Thread {
                             .map(Answer::getDisplayedAnswer)
                             .orElse(null))
         ).collect(Collectors.toList()));
+        // finally, add all of the attribute values
+        row.addAll(submission.getAttributeValues());
         // print the current row to the csv
         csvPrinter.printRecord(row);
     }

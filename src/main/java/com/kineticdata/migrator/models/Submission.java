@@ -6,6 +6,7 @@ import com.bmc.arsys.api.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Submission {
     public static final String FORM = "KS_SRV_CustomerSurvey_base";
@@ -20,6 +21,14 @@ public class Submission {
     public static final int TEMPLATE_ID = 700000800;
     public static final int UPDATED_AT = 6;
     public static final int VALIDATION_STATUS = 700002400;
+    public static final int[] ATTRIBUTES = { 300299400, 300299500, 300299600, 300299700, 300299800,
+            700001806, 700001807, 700001808, 700001809, 700001810, 700001811, 700001812, 700001813, 700001814, 700001815,
+            700001816, 700001817, 700001818, 700001819, 700001820, 700001821, 700001822, 700001823, 700001824, 700001825,
+            700001826, 700001827, 700001828, 700001829, 700001830, 700001831, 700001832, 700001833, 700001834, 700001835,
+            700001836, 700001837, 700001838, 700001839, 700001840, 700001841, 700001842, 700001843, 700001844, 700001845,
+            700001846, 700001847, 700001848, 700001849, 700001850, 700001851, 700001852, 700001853, 700001854, 700001855,
+            700001856, 700001857, 700001858, 700001859, 700001860, 700001861, 700001862, 700001863, 700001864, 700001865,
+            700001866, 700001867, 700001868, 700001869, 700001870 };
     private static final List<String> REQUEST_STATUSES = Arrays.asList("Open", "Closed");
     private static final List<String> STATUSES = Arrays.asList("New", "Sent", "Completed",
             "Expired", "Delete", "In Progress", "Opt Out");
@@ -34,12 +43,13 @@ public class Submission {
     private final String submitter;
     private final String updatedAt;
     private final String validationStatus;
+    private final List<String> attributeValues;
     private final List<Answer> answers;
     private final List<UnlimitedAnswer> unlimitedAnswers;
     private final List<Attachment> attachments;
 
     private Submission() {
-        this(null, null, null, null, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     public Submission(Entry entry) {
@@ -53,12 +63,15 @@ public class Submission {
              timestampToString((Timestamp)entry.get(CREATED_AT).getValue()),
              timestampToString((Timestamp)entry.get(SUBMITTED_AT).getValue()),
              timestampToString((Timestamp)entry.get(UPDATED_AT).getValue()),
+             Arrays.stream(ATTRIBUTES).mapToObj(entry::get)
+                                      .map(value -> value == null ? "" : (String) value.getValue())
+                                      .collect(Collectors.toList()),
              null, null, null);
     }
 
     private Submission(String id, String requestId, Integer status, Integer requestStatus,
                        String validationStatus, String submitter, String closedAt, String createdAt,
-                       String submittedAt, String updatedAt, List<Answer> answers,
+                       String submittedAt, String updatedAt, List<String> attributeValues, List<Answer> answers,
                        List<UnlimitedAnswer> unlimitedAnswers, List<Attachment> attachments) {
         this.closedAt = closedAt;
         this.createdAt = createdAt;
@@ -70,6 +83,7 @@ public class Submission {
         this.submitter = submitter;
         this.updatedAt = updatedAt;
         this.validationStatus = validationStatus;
+        this.attributeValues = attributeValues;
         this.answers = answers;
         this.unlimitedAnswers = unlimitedAnswers;
         this.attachments = attachments;
@@ -115,6 +129,10 @@ public class Submission {
         return validationStatus;
     }
 
+    public List<String> getAttributeValues() {
+        return attributeValues;
+    }
+
     public List<Answer> getAnswers() {
         return answers;
     }
@@ -129,17 +147,17 @@ public class Submission {
 
     public Submission withAnswers(List<Answer> answers) {
         return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, answers, unlimitedAnswers, attachments);
+                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withUnlimitedAnswers(List<UnlimitedAnswer> unlimitedAnswers) {
         return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, answers, unlimitedAnswers, attachments);
+                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withAttachments(List<Attachment> attachments) {
         return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, answers, unlimitedAnswers, attachments);
+                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     private static String timestampToString(Timestamp timestamp) {
