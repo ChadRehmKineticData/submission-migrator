@@ -45,7 +45,11 @@ public class ArsHelper {
 
     public static QualifierInfo parseQual(ARServerUser user, String form, String qual) {
         try {
-            return user.parseQualification(form, qual);
+            QualifierInfo result = user.parseQualification(form, qual);
+            if (result == null) {
+                throw new RuntimeException(String.format("Got null parsing the following qualification for '%s': %s", form, qual));
+            }
+            return result;
         } catch (ARException e) {
             throw new RuntimeException(e);
         }
