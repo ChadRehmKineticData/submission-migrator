@@ -21,33 +21,35 @@ public class App
     public static final String VERSION = "1.0.1";
 
     public static void main( String[] args ) throws IOException, ParseException {
-        Config config = Config.configure(CONFIG_FILE);
-        ARServerUser user = ArsHelper.createUser(config);
         String action = argAt(args, 0);
         if (action == null) {
             System.out.println("An action argument is required: import, export.");
-        } else {
-            if (action.equals("import")) {
-                for (String arg : Arrays.copyOfRange(args, 1, args.length)) {
-                    Import.start(config, arg);
-                }
-            } else if (action.equals("export")) {
-                String catalog = argAt(args, 1);
-                String template = argAt(args, 2);
-                if (catalog != null) {
-                    if (template != null) {
-                        Export.export(config, user, catalog, template);
-                    } else {
-                        Export.export(config, user, catalog);
-                    }
-                } else {
-                    Export.export(config, user);
-                }
-            } else if (action.equals("version")) {
-                System.out.println(VERSION);
-            } else {
-                System.out.println(format("Invalid action argument specified: %s", action));
+            return;
+        }
+        if (action.equals("version")) {
+            System.out.println(VERSION);
+            return;
+        }
+        Config config = Config.configure(CONFIG_FILE);
+        if (action.equals("import")) {
+            for (String arg : Arrays.copyOfRange(args, 1, args.length)) {
+                Import.start(config, arg);
             }
+        } else if (action.equals("export")) {
+            ARServerUser user = ArsHelper.createUser(config);
+            String catalog = argAt(args, 1);
+            String template = argAt(args, 2);
+            if (catalog != null) {
+                if (template != null) {
+                    Export.export(config, user, catalog, template);
+                } else {
+                    Export.export(config, user, catalog);
+                }
+            } else {
+                Export.export(config, user);
+            }
+        } else {
+            System.out.println(format("Invalid action argument specified: %s", action));
         }
     }
 
