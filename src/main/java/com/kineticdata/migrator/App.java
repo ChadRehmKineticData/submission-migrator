@@ -18,7 +18,7 @@ public class App
     public static final String ID_CSV_FILE = "ids.csv";
     public static final String TEMPLATE_YAML_FILE = "template.yaml";
     public static final String ATTACHMENT_DIR = "attachments";
-    public static final String VERSION = "1.0.1-SNAPSHOT";
+    public static final String VERSION = "1.0.1";
 
     public static void main( String[] args ) throws IOException, ParseException {
         Config config = Config.configure(CONFIG_FILE);
