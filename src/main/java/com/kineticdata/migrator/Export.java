@@ -41,8 +41,16 @@ public class Export {
             format("'%s'=\"%s\" AND '%s'=\"%s\"", Template.CATALOG, catalog, Template.NAME, template);
     private static final Function<String,String> QUESTION_QUAL = (templateId) ->
             format("'%s'=\"%s\" AND '%s'='%s'", Question.TEMPLATE_ID, templateId, Question.ID, Question.PARENT_QUESTION_ID);
-    private static final Function<String,String> SUBMISSION_QUAL = (templateId) ->
-            format("'%s'=\"%s\"", Submission.TEMPLATE_ID, templateId);
+    private static final BiFunction<String,Config,String> SUBMISSION_QUAL = (templateId, config) -> {
+        String qualification;
+        if (config.getQualification() == "null") {
+            qualification = format("'%s'=\"%s\" AND %s", Submission.TEMPLATE_ID, templateId, config.getQualification());
+        } else {
+            qualification = format("'%s'=\"%s\"", Submission.TEMPLATE_ID, templateId); 
+        }
+        System.out.println(format("Qualification: %s", qualification));
+        return qualification;
+    };
     // configuration static variables that may eventually be arguments/config options
     private static final int SUBMISSION_CHUNK_SIZE = 100;
     private static final int QUEUE_MULTIPLIER = 2;
@@ -79,7 +87,7 @@ public class Export {
                     withAttachments = new ArrayBlockingQueue<>(queueSize);
             // create the workers
             List<Thread> threads = Arrays.asList(
-                    new SubmissionProducer(config, SUBMISSION_QUAL.apply(template.getId()), submissions),
+                    new SubmissionProducer(config, SUBMISSION_QUAL.apply(template.getId(), config), submissions),
                     new AnswerProducer(config, SUBMISSION_CHUNK_SIZE, submissions, withAnswers),
                     new UnlimitedAnswerProducer(config, SUBMISSION_CHUNK_SIZE, withAnswers, withUnlimitedAnswers),
                     new AttachmentProducer(config, templateDir, withUnlimitedAnswers, withAttachments),

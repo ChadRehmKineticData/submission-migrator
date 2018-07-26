@@ -16,6 +16,7 @@ public class Config {
     private final String reServer;
     private final Integer rePort;
     private final Integer reQueryLimit;
+    private final String reQualification;
     private final String ceUrl;
     private final String ceSpaceSlug;
     private final String ceKappSlug;
@@ -29,6 +30,7 @@ public class Config {
         reUsername = (String) reConfig.get("username");
         rePassword = (String) reConfig.get("password");
         reQueryLimit = (Integer) reConfig.get("query_limit");
+        reQualification = (String) reConfig.get("qualification");
         Map<String,Object> ceConfig = map.get("Request CE");
         ceUrl = (String) ceConfig.get("url");
         ceSpaceSlug = (String) ceConfig.get("space");
@@ -55,6 +57,10 @@ public class Config {
 
     public Integer getReQueryLimit() {
         return reQueryLimit;
+    }
+
+    public String getQualification() {
+        return reQualification;
     }
 
     public String getCeUrl() {
