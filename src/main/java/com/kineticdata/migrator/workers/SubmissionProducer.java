@@ -28,7 +28,8 @@ public class SubmissionProducer extends Thread {
         Submission.ATTRIBUTES[45], Submission.ATTRIBUTES[46], Submission.ATTRIBUTES[47], Submission.ATTRIBUTES[48], Submission.ATTRIBUTES[49],
         Submission.ATTRIBUTES[50], Submission.ATTRIBUTES[51], Submission.ATTRIBUTES[52], Submission.ATTRIBUTES[53], Submission.ATTRIBUTES[54],
         Submission.ATTRIBUTES[55], Submission.ATTRIBUTES[56], Submission.ATTRIBUTES[57], Submission.ATTRIBUTES[58], Submission.ATTRIBUTES[59],
-        Submission.ATTRIBUTES[60], Submission.ATTRIBUTES[61], Submission.ATTRIBUTES[62], Submission.ATTRIBUTES[63]
+        Submission.ATTRIBUTES[60], Submission.ATTRIBUTES[61], Submission.ATTRIBUTES[62], Submission.ATTRIBUTES[63], Submission.ATTRIBUTES[64],
+        Submission.ATTRIBUTES[65], Submission.ATTRIBUTES[66], Submission.ATTRIBUTES[67], Submission.ATTRIBUTES[68], Submission.ATTRIBUTES[68]
     };
     private static final List<SortInfo> ORDER = Collections.EMPTY_LIST;
     private final ARServerUser user;
