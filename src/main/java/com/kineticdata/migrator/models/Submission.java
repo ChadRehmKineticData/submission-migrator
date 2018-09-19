@@ -29,8 +29,7 @@ public class Submission {
             700001826, 700001827, 700001828, 700001829, 700001830, 700001831, 700001832, 700001833, 700001834, 700001835,
             700001836, 700001837, 700001838, 700001839, 700001840, 700001841, 700001842, 700001843, 700001844, 700001845,
             700001846, 700001847, 700001848, 700001849, 700001850, 700001851, 700001852, 700001853, 700001854, 700001855,
-            700001856, 700001857, 700001858, 700001859, 700001860, 700001861, 700001862, 700001863, 700001864, 700001865,
-            700001866, 700001867, 700001868, 700001869, 700001870 };
+            700001856, 700001857, 700001858, 700001859, 700001860, 700001861, 700001862, 700001863, 700001864 };
     private static final List<String> REQUEST_STATUSES = Arrays.asList("Open", "Closed");
     private static final List<String> STATUSES = Arrays.asList("New", "Sent", "Completed",
             "Expired", "Delete", "In Progress", "Opt Out");
@@ -40,8 +39,8 @@ public class Submission {
     private final String id;
     private final String requestId;
     private final Integer requestStatus;
-    // private final <> originatingId;
-    // private final <> originatingIdDisplay;
+    private final String originatingId;
+    private final String originatingIdDisplay;
     private final Integer status;
     private final String submittedAt;
     private final String submitter;
@@ -53,7 +52,7 @@ public class Submission {
     private final List<Attachment> attachments;
 
     private Submission() {
-        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     public Submission(Entry entry) {
@@ -61,10 +60,8 @@ public class Submission {
              (String) entry.get(REQUEST_ID).getValue(),
              (Integer) entry.get(STATUS).getValue(),
              (Integer) entry.get(REQUEST_STATUS).getValue(),
-             System.out.println(entry.get(ORIGINATING_ID).getValue()),
-             System.out.println(entry.get(ORIGINATINGID_DISPLAY).getValue()),
-             // ()entry.get(ORIGINATING_ID).getValue(),
-             // ()entry.get(ORIGINATINGID_DISPLAY).getValue(),
+             (String) entry.get(ORIGINATING_ID).getValue(),
+             (String) entry.get(ORIGINATINGID_DISPLAY).getValue(),
              (String) entry.get(VALIDATION_STATUS).getValue(),
              (String) entry.get(SUBMITTER).getValue(),
              timestampToString((Timestamp)entry.get(CLOSED_AT).getValue()),
@@ -77,7 +74,8 @@ public class Submission {
              null, null, null);
     }
 
-    private Submission(String id, String requestId, Integer status, Integer requestStatus,
+    private Submission(String id, String requestId, Integer status, Integer requestStatus, String originatingId,
+                       String originatingIdDisplay,
                        String validationStatus, String submitter, String closedAt, String createdAt,
                        String submittedAt, String updatedAt, List<String> attributeValues, List<Answer> answers,
                        List<UnlimitedAnswer> unlimitedAnswers, List<Attachment> attachments) {
@@ -86,8 +84,8 @@ public class Submission {
         this.id = id;
         this.requestId = requestId;
         this.requestStatus = requestStatus;
-        // this.originatingId = originatingId;
-        // this.originatingIdDisplay = originatingIdDisplay;
+        this.originatingId = originatingId;
+        this.originatingIdDisplay = originatingIdDisplay;
         this.status = status;
         this.submittedAt = submittedAt;
         this.submitter = submitter;
@@ -123,13 +121,13 @@ public class Submission {
         return STATUSES.get(status);
     }
 
-    // public String getOriginatingId() {
-    //     return originatingId;
-    // }
+    public String getOriginatingId() {
+        return originatingId;
+    }
 
-    // public String getOriginatingIdDisplay() {
-    //     return originatingIdDisplay;
-    // }
+    public String getOriginatingIdDisplay() {
+        return originatingIdDisplay;
+    }
 
     public String getSubmittedAt() {
         return submittedAt;
@@ -164,17 +162,17 @@ public class Submission {
     }
 
     public Submission withAnswers(List<Answer> answers) {
-        return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
+        return new Submission(id, requestId, status, requestStatus, originatingId, originatingIdDisplay, validationStatus, submitter,
                 closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withUnlimitedAnswers(List<UnlimitedAnswer> unlimitedAnswers) {
-        return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
+        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay, validationStatus, submitter,
                 closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withAttachments(List<Attachment> attachments) {
-        return new Submission(id, requestId, status, requestStatus, validationStatus, submitter,
+        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay, validationStatus, submitter,
                 closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
     }
 

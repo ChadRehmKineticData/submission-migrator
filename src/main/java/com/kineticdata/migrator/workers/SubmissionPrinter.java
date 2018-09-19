@@ -53,11 +53,13 @@ public class SubmissionPrinter extends Thread {
     public void printSubmission(CSVPrinter csvPrinter, Submission submission) throws IOException {
         // initialize the row, setting some of the submission values
         List<String> row = new ArrayList<>(Arrays.asList(submission.getRequestId(), submission.getId(),
-                submission.getStatus(), submission.getRequestStatus(), submission.getValidationStatus(),
+                submission.getStatus(), submission.getRequestStatus(), submission.getOriginatingId(),
+                submission.getOriginatingIdDisplay(), submission.getValidationStatus(),
                 submission.getSubmitter(), submission.getCreatedAt(), submission.getSubmittedAt(),
                 submission.getClosedAt(), submission.getUpdatedAt()));
+        System.out.println(submission.getUnlimitedAnswers());
         // for each of the questions we add the corresponding answer (or null) to the row
-        row.addAll(questions.stream().map(Question::getId).map(questionId ->
+        row.addAll(questions.stream().map(Question::getId).map(questionId -> 
             submission.getUnlimitedAnswers().stream()
                     .filter(unlimitedAnswer -> unlimitedAnswer.getQuestionId().equals(questionId))
                     .findFirst()
@@ -66,7 +68,7 @@ public class SubmissionPrinter extends Thread {
                             .filter(answer -> answer.getQuestionId().equals(questionId))
                             .findFirst()
                             .map(Answer::getDisplayedAnswer)
-                            .orElse(null))
+                            .orElse(null));
         ).collect(Collectors.toList()));
         // finally, add all of the attribute values
         row.addAll(submission.getAttributeValues());
