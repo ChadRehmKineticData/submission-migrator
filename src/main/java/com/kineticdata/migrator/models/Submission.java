@@ -15,6 +15,8 @@ public class Submission {
     public static final int ID = 179;
     public static final int REQUEST_ID = 1;
     public static final int REQUEST_STATUS = 700089541;
+    public static final int ORIGINATING_ID =  600000310;
+    public static final int ORIGINATINGID_DISPLAY = 700088607;
     public static final int STATUS = 7;
     public static final int SUBMITTED_AT = 700001285;
     public static final int SUBMITTER = 2;
@@ -38,6 +40,8 @@ public class Submission {
     private final String id;
     private final String requestId;
     private final Integer requestStatus;
+    // private final <> originatingId;
+    // private final <> originatingIdDisplay;
     private final Integer status;
     private final String submittedAt;
     private final String submitter;
@@ -57,6 +61,10 @@ public class Submission {
              (String) entry.get(REQUEST_ID).getValue(),
              (Integer) entry.get(STATUS).getValue(),
              (Integer) entry.get(REQUEST_STATUS).getValue(),
+             System.out.println(entry.get(ORIGINATING_ID).getValue()),
+             System.out.println(entry.get(ORIGINATINGID_DISPLAY).getValue()),
+             // ()entry.get(ORIGINATING_ID).getValue(),
+             // ()entry.get(ORIGINATINGID_DISPLAY).getValue(),
              (String) entry.get(VALIDATION_STATUS).getValue(),
              (String) entry.get(SUBMITTER).getValue(),
              timestampToString((Timestamp)entry.get(CLOSED_AT).getValue()),
@@ -78,6 +86,8 @@ public class Submission {
         this.id = id;
         this.requestId = requestId;
         this.requestStatus = requestStatus;
+        // this.originatingId = originatingId;
+        // this.originatingIdDisplay = originatingIdDisplay;
         this.status = status;
         this.submittedAt = submittedAt;
         this.submitter = submitter;
@@ -112,6 +122,14 @@ public class Submission {
     public String getStatus() {
         return STATUSES.get(status);
     }
+
+    // public String getOriginatingId() {
+    //     return originatingId;
+    // }
+
+    // public String getOriginatingIdDisplay() {
+    //     return originatingIdDisplay;
+    // }
 
     public String getSubmittedAt() {
         return submittedAt;
