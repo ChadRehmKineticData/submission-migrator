@@ -44,7 +44,7 @@ public class Export {
 			Question.TEMPLATE_ID, templateId, Question.ID, Question.PARENT_QUESTION_ID);
 	private static final BiFunction<String, Config, String> SUBMISSION_QUAL = (templateId, config) -> {
 		String qualification;
-		if (config.getQualification() == "null") {
+		if (config.getQualification() != "null") {
 			qualification = format("'%s'=\"%s\" AND %s", Submission.TEMPLATE_ID, templateId, config.getQualification());
 		} else {
 			qualification = format("'%s'=\"%s\"", Submission.TEMPLATE_ID, templateId);

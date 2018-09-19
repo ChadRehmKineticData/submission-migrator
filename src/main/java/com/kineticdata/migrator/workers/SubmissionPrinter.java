@@ -43,8 +43,8 @@ public class SubmissionPrinter extends Thread {
 
     public void printHeader(CSVPrinter csvPrinter, List<Question> questions) throws IOException {
         List<String> header = new ArrayList<>(Arrays.asList("Request Id", "Instance Id", "Status",
-                "Request Status", "Validation Status", "Submitter", "Created At", "Submitted At",
-                "Closed At", "Updated At"));
+                "Request Status", "Originating Id", "Originating Id Display", "Validation Status", "Submitter",
+                "Created At", "Submitted At", "Closed At", "Updated At"));
         header.addAll(questions.stream().map(Question::getName).collect(Collectors.toList()));
         header.addAll(IntStream.range(0, 70).boxed().map(n -> "Attribute " + (n + 1)).collect(Collectors.toList()));
         csvPrinter.printRecord(header);
@@ -57,18 +57,13 @@ public class SubmissionPrinter extends Thread {
                 submission.getOriginatingIdDisplay(), submission.getValidationStatus(),
                 submission.getSubmitter(), submission.getCreatedAt(), submission.getSubmittedAt(),
                 submission.getClosedAt(), submission.getUpdatedAt()));
-        System.out.println(submission.getUnlimitedAnswers());
         // for each of the questions we add the corresponding answer (or null) to the row
         row.addAll(questions.stream().map(Question::getId).map(questionId -> 
-            submission.getUnlimitedAnswers().stream()
-                    .filter(unlimitedAnswer -> unlimitedAnswer.getQuestionId().equals(questionId))
-                    .findFirst()
-                    .map(UnlimitedAnswer::getUnlimitedAnswer)
-                    .orElse(submission.getAnswers().stream()
+            submission.getAnswers().stream()
                             .filter(answer -> answer.getQuestionId().equals(questionId))
                             .findFirst()
                             .map(Answer::getDisplayedAnswer)
-                            .orElse(null));
+                            .orElse(null)
         ).collect(Collectors.toList()));
         // finally, add all of the attribute values
         row.addAll(submission.getAttributeValues());
