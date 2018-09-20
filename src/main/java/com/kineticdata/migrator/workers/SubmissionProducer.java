@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class SubmissionProducer extends Thread {
     private static final int[] FIELDS = {
         Submission.CLOSED_AT,      Submission.CREATED_AT,     Submission.ID,             Submission.REQUEST_ID,     Submission.REQUEST_STATUS,
-        Submission.ORIGINATING_ID, Submission.ORIGINATINGID_DISPLAY,
-        Submission.STATUS,         Submission.SUBMITTED_AT,   Submission.SUBMITTER,      Submission.UPDATED_AT,     Submission.VALIDATION_STATUS,
+        Submission.ORIGINATING_ID, Submission.ORIGINATINGID_DISPLAY, Submission.STATUS,  Submission.SUBMITTED_AT,   Submission.SUBMITTER,
+        Submission.UPDATED_AT,     Submission.VALIDATION_STATUS, Submission.SUBMIT_TYPE,
         Submission.ATTRIBUTES[0],  Submission.ATTRIBUTES[1],  Submission.ATTRIBUTES[2],  Submission.ATTRIBUTES[3],  Submission.ATTRIBUTES[4],
         Submission.ATTRIBUTES[5],  Submission.ATTRIBUTES[6],  Submission.ATTRIBUTES[7],  Submission.ATTRIBUTES[8],  Submission.ATTRIBUTES[9],
         Submission.ATTRIBUTES[10], Submission.ATTRIBUTES[11], Submission.ATTRIBUTES[12], Submission.ATTRIBUTES[13], Submission.ATTRIBUTES[14],

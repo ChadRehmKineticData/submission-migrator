@@ -23,6 +23,7 @@ public class Submission {
     public static final int TEMPLATE_ID = 700000800;
     public static final int UPDATED_AT = 6;
     public static final int VALIDATION_STATUS = 700002400;
+    public static final int SUBMIT_TYPE = 700088475;
     public static final int[] ATTRIBUTES = { 300299400, 300299500, 300299600, 300299700, 300299800,
             700001806, 700001807, 700001808, 700001809, 700001810, 700001811, 700001812, 700001813, 700001814, 700001815,
             700001816, 700001817, 700001818, 700001819, 700001820, 700001821, 700001822, 700001823, 700001824, 700001825,
@@ -46,13 +47,14 @@ public class Submission {
     private final String submitter;
     private final String updatedAt;
     private final String validationStatus;
+    private final String submitType;
     private final List<String> attributeValues;
     private final List<Answer> answers;
     private final List<UnlimitedAnswer> unlimitedAnswers;
     private final List<Attachment> attachments;
 
     private Submission() {
-        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     public Submission(Entry entry) {
@@ -63,6 +65,7 @@ public class Submission {
              (String) entry.get(ORIGINATING_ID).getValue(),
              (String) entry.get(ORIGINATINGID_DISPLAY).getValue(),
              (String) entry.get(VALIDATION_STATUS).getValue(),
+             (String) entry.get(SUBMIT_TYPE).getValue(),
              (String) entry.get(SUBMITTER).getValue(),
              timestampToString((Timestamp)entry.get(CLOSED_AT).getValue()),
              timestampToString((Timestamp)entry.get(CREATED_AT).getValue()),
@@ -75,10 +78,10 @@ public class Submission {
     }
 
     private Submission(String id, String requestId, Integer status, Integer requestStatus, String originatingId,
-                       String originatingIdDisplay,
-                       String validationStatus, String submitter, String closedAt, String createdAt,
-                       String submittedAt, String updatedAt, List<String> attributeValues, List<Answer> answers,
-                       List<UnlimitedAnswer> unlimitedAnswers, List<Attachment> attachments) {
+                       String originatingIdDisplay, String validationStatus, String submitter, String closedAt,
+                       String createdAt, String submittedAt, String updatedAt, String submitType,
+                       List<String> attributeValues, List<Answer> answers, List<UnlimitedAnswer> unlimitedAnswers,
+                       List<Attachment> attachments) {
         this.closedAt = closedAt;
         this.createdAt = createdAt;
         this.id = id;
@@ -91,6 +94,7 @@ public class Submission {
         this.submitter = submitter;
         this.updatedAt = updatedAt;
         this.validationStatus = validationStatus;
+        this.submitType = submitType;
         this.attributeValues = attributeValues;
         this.answers = answers;
         this.unlimitedAnswers = unlimitedAnswers;
@@ -145,6 +149,10 @@ public class Submission {
         return validationStatus;
     }
 
+    public String getSubmitType() {
+        return submitType;
+    }
+
     public List<String> getAttributeValues() {
         return attributeValues;
     }
@@ -162,18 +170,21 @@ public class Submission {
     }
 
     public Submission withAnswers(List<Answer> answers) {
-        return new Submission(id, requestId, status, requestStatus, originatingId, originatingIdDisplay, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
+        return new Submission(id, requestId, status, requestStatus, originatingId, originatingIdDisplay,
+            validationStatus, submitter, closedAt, createdAt, submittedAt, updatedAt, submitType,
+            attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withUnlimitedAnswers(List<UnlimitedAnswer> unlimitedAnswers) {
-        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
+        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay,
+            validationStatus, submitter, closedAt, createdAt, submittedAt, updatedAt, submitType,
+            attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     public Submission withAttachments(List<Attachment> attachments) {
-        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay, validationStatus, submitter,
-                closedAt, createdAt, submittedAt, updatedAt, attributeValues, answers, unlimitedAnswers, attachments);
+        return new Submission(id, requestId, status, requestStatus,  originatingId, originatingIdDisplay,
+            validationStatus, submitter, closedAt, createdAt, submittedAt, updatedAt, submitType,
+            attributeValues, answers, unlimitedAnswers, attachments);
     }
 
     private static String timestampToString(Timestamp timestamp) {
