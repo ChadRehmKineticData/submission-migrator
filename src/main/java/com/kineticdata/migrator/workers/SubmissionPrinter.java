@@ -57,6 +57,7 @@ public class SubmissionPrinter extends Thread {
                 submission.getOriginatingIdDisplay(), submission.getValidationStatus(),
                 submission.getSubmitter(), submission.getCreatedAt(), submission.getSubmittedAt(),
                 submission.getClosedAt(), submission.getUpdatedAt(), submission.getSubmitType()));
+        
         // for each of the questions we add the corresponding answer (or null) to the row
         row.addAll(questions.stream().map(Question::getId).map(questionId -> 
             submission.getAnswers().stream()

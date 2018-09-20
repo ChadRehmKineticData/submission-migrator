@@ -65,12 +65,12 @@ public class Submission {
              (String) entry.get(ORIGINATING_ID).getValue(),
              (String) entry.get(ORIGINATINGID_DISPLAY).getValue(),
              (String) entry.get(VALIDATION_STATUS).getValue(),
-             (String) entry.get(SUBMIT_TYPE).getValue(),
              (String) entry.get(SUBMITTER).getValue(),
              timestampToString((Timestamp)entry.get(CLOSED_AT).getValue()),
              timestampToString((Timestamp)entry.get(CREATED_AT).getValue()),
              timestampToString((Timestamp)entry.get(SUBMITTED_AT).getValue()),
              timestampToString((Timestamp)entry.get(UPDATED_AT).getValue()),
+             (String) entry.get(SUBMIT_TYPE).getValue(),
              Arrays.stream(ATTRIBUTES).mapToObj(entry::get)
                                       .map(value -> value == null ? "" : (String) value.getValue())
                                       .collect(Collectors.toList()),
