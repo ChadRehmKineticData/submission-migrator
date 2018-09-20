@@ -1,11 +1,6 @@
 .gradle/
 .idea/
-build/classes
-build/dependency-cache
-build/reports
-build/test-results
-build/tmp
-build/libs/config.yaml
+build/
 bin/
 data/
 config.yaml
