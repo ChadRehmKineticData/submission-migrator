@@ -43,7 +43,7 @@ public class SubmissionPrinter extends Thread {
 
     public void printHeader(CSVPrinter csvPrinter, List<Question> questions) throws IOException {
         List<String> header = new ArrayList<>(Arrays.asList("Request Id", "Instance Id", "Status",
-                "Request Status", "Originating Id", "Originating Id Display", "Validation Status", "Submitter",
+                "Request Status", "Originating Id", "Originating Id Display", "survey_base Validation Status", "Submitter",
                 "Created At", "Submitted At", "Closed At", "Updated At", "Submit Type"));
         header.addAll(questions.stream().map(Question::getName).collect(Collectors.toList()));
         header.addAll(IntStream.range(0, 70).boxed().map(n -> "Attribute " + (n + 1)).collect(Collectors.toList()));
